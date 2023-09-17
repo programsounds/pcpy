@@ -1,0 +1,8 @@
+# Python bytecode-complied files
+__pycache__/
+
+# PyCharm project setting directory
+.idea/
+
+# Ignore macOS system files
+.DS_Store
