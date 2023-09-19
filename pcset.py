@@ -1,19 +1,18 @@
 """
-pcset.py    Yota Kobayashi
+pcpy.py    Yota Kobayashi
 
-This module includes a class pcset. The object of pcset class
-can be instantiated as Pcset(pcs) where pcs is an iterable
-(tuple, set, list, or Pcset object) and each pc is an int
-(i.e., pcs is not a string).
+This module includes the Pcset class. An object of the Pcset class can be
+instantiated as Pcset(pcs) where pcs is an iterable (tuple, set, list,
+or Pcset object). Each pc is an int, hence pcs is not a string.
 
-The instance variable stores the pcs as a set representing an
-unordered collection of unique elements. The class supports
-set operational and relational methods. For the full list of the
-methods, see the doc string of pcset class.
+The instance variable stores the pcs as a set, representing an unordered
+collection of unique elements. The class supports set operational and
+relational methods. For the full list of the methods, see the doc string of
+Pcset class.
 
-The class supports __iter__ and can return a generator object--
-an iterable with the current pcs--therefore, method chaining is
-possible as, for example:
+The class supports __iter__ and can return a generator object, that is,
+an iterable with the current pcs. Therefore, method chaining is possible,
+for example:
 
 a, b = {0,1,4}, {1,2}
 s = Pcset(a)
@@ -21,9 +20,9 @@ s.transpose(4).union(b).normalForm()
 """
 
 from itertools import combinations
-from pcsets import constants as c
+from pcpy import constants as c
 
-# __all__ = ["Pcset"]
+__all__ = ["Pcset"]
 
 
 class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
@@ -35,9 +34,10 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         __iter__()
         __str__()
         __len__()
+        copy()
         clone()
 
-    ACCESSOR
+    ACCESSOR  # TODO: replace with properties?
         getSet()
 
     SET MEMBERSHIP
@@ -90,21 +90,21 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         self.pcset = set(pcs)
 
     def __iter__(self):
-        """Returns a generator object comprising the pcs."""
+        """Returns an iterable of the current object."""
         for pc in self.pcset:
             yield pc
 
     def __repr__(self):
         """
-        Return the official string representation of the object.
+        Returns the official string representation of the object.
 
         >>> Pcset({0, 1, 4})
-        PCSet({0, 1, 4})
+        Pcset({0, 1, 4})
         """
-        return "Pcset({})".format(self.pcset)
+        return 'Pcset({})'.format(self.pcset)
 
     def __len__(self):
-        """Returns the cardinality of the pc set."""
+        """Returns the cardinality of the pcset."""
         return len(self.pcset)
 
     def copy(self):
@@ -113,6 +113,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def clone(self):
         """Same as copy method--to be deprecated."""
+        # TODO: deprecate clone method
         return self.copy()
 
     # Accessor methods --------------------------------------------------------
@@ -123,13 +124,14 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
         To obtain a deep copy, use copy method.
         """
+        # TODO: use property instead?
         return self.pcset
 
     # PC membership methods ---------------------------------------------------
 
     def union(self, pcs):
         """
-        Add pcs to the current pc set. No duplicate counts.
+        Adds pcs to the current pcset. No duplicate counts.
 
         :param pcs: an iterable with pcs.
         """
@@ -138,8 +140,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def difference(self, pcs):
         """
-        Mutates to a new set with elements in the current set and
-        not in the input pcs.
+        Removes all pcs in the input pcs from the current pcset.
 
         :param pcs: an iterable with pcs.
         """
@@ -148,8 +149,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def intersection(self, pcs):
         """
-        Mutates to a new set with elements in both the current set and
-        the input pcs.
+        Removes all pcs that are not in the input pcs from the current pcset.
 
         :param pcs: an iterable with pcs.
         """
@@ -158,8 +158,8 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def symmetricDifference(self, pcs):
         """
-        Mutates to a new set with elements in either the current set
-        or the input pcs but not both.
+        Mutates the current pcset with pcs in either the current pcset or the
+        input pcs but not both.
 
         :param pcs: an iterable with pcs.
         """
@@ -167,7 +167,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         return self
 
     def clear(self):
-        """Removes all the pcs from the current set."""
+        """Removes all the pcs from the current pcset."""
         self.pcset.clear()
         return self
 
@@ -175,7 +175,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def transpose(self, n):
         """
-        Transposes the current set by an ordered pc interval n.
+        Transposes the current pcset by an ordered pc interval n.
 
         :param n: mod 12 integer for the transposition number.
         """
@@ -184,17 +184,19 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def invert(self):
         """
-        Inverts the current set around pc 0.
+        Inverts the current pcset around pc 0.
         """
         self.pcset = {(12 - pc) % 12 for pc in self.pcset}
         return self
 
     def invertXY(self, x, y):
         """
-        Inverts the current set around an axis of symmetry specified by pcs x and y:
-        as a result, pcs x and y map onto each other.
-        This is an operation equivalent to TnI where n = x + y. The advantage of
-        using I(x,y) over TnI is that it allows for specifying the axis of symmetry.
+        Inverts the current pcset around an axis of symmetry specified by
+        pcs x and y: as a result, pcs x and y map onto each other.
+
+        This is an operation equivalent to TnI where n = x + y. The
+        advantage of using I(x,y) over TnI is that it allows for specifying
+        the axis of symmetry.
 
         :param x: int that inverts x onto y.
         :param y: int that inverts y onto x.
@@ -218,7 +220,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def opTnI(self, n):
         """
-        Shorthand for TnI operation--inversion followed by transposition at n.
+        Shorthand for TnI operation: inversion followed by transposition at n.
         """
         self.invert().transpose(n)
         return self
@@ -235,16 +237,16 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
     def icv(self):
         """
         A method to compute an interval-class vector (ICV) of the
-        current set--a tabular representation for counting of unordered
+        current set: a tabular representation for counting of unordered
         pc intervals (i.e., ics).
 
         :return: a list representing the ICV.
         """
         icv = [0] * 6
-        pcList = sorted(self.pcset)
-        while len(pcList) > 1:
-            pc1 = pcList.pop()
-            for pc in pcList:
+        pcseg = sorted(self.pcset)
+        while len(pcseg) > 1:
+            pc1 = pcseg.pop()
+            for pc in pcseg:
                 i = (pc - pc1) % 12  # Ordered interval class
                 i = min(i, 12 - i)
                 icv[i-1] += 1
@@ -252,7 +254,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def indexVector(self):
         """
-        A method to compute an index vector of the input pc set.
+        A method to compute an index vector of the current pcset.
 
         :return: a list representing the index vector.
         """
@@ -266,34 +268,37 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def normalForm(self):
         """
-        A method to compute the normal form of the current set.
+        A method to compute the normal form of the current pcset.
 
         :return: a list of pcs representing the normal form.
         """
-        card = len(self.pcset)       # Set cardinality
+        card = len(self.pcset)      # Set cardinality
         if card == 0:
             return []
         elif card == 12:
             return list(range(12))
-        pcList = sorted(self.pcset)  # pc set to a sorted list
-        rots = []                    # Array for rotations of pcList
-        for r in range(card):        # Make all rotations of pcList
-            rots.append(self.__rotate(pcList, r))
+        pcseg = sorted(self.pcset)  # pcset to a sorted list
+        rots = []                   # Array for rotations of pcseg
+        for r in range(card):       # Make all rotations of pcseg
+            rots.append(self.__rotate(pcseg, r))
         k = card - 1
         while len(rots) > 1:
-            if k == 0:  # If k=0 is reached, NF is the one with the smallest first pc.
+            # If k=0 is reached, NF is the one with the smallest first pc.
+            if k == 0:
                 return rots[0]
             else:
                 intervals = [(rot[k] - rot[0]) % 12 for rot in rots]
-                smallest = min(intervals)  # Smallest intervals of each member of rots
+                # Smallest intervals of each member of rots
+                smallest = min(intervals)
                 # Delete a set in rots if its interval > the smallest interval
-                rots = [rots[i] for i in range(len(rots)) if intervals[i] == smallest]
+                rots = [rots[i] for i in range(len(rots)) if intervals[i] ==
+                        smallest]
                 k -= 1
         return rots[0]
 
     def primeForm(self):
         """
-        A method to compute the prime form of the current set.
+        A method to compute the prime form of the current pcset.
 
         :return: a list of pcs representing the prime form.
         """
@@ -592,8 +597,12 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         :return: ICVSIM value.
         :rtype: float
         """
-        from pcsets.relation import icvsim  # FIXME: import will be at top.
+        from pcpy.relation import icvsim  # FIXME: import will be at top.
         return icvsim(self.pcset, pcs, raw=raw)
+
+    def recrel(self, pcs):
+        #TODO: implement recrel
+        pass
 
     # Private methods ---------------------------------------------------------
 
