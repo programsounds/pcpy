@@ -3,21 +3,20 @@ operation.py    Yota Kobayashi
 
 A module for pitch-class set operations.
 
-This module includes functions that take a single pc set to
-operate on, while the relation module takes two pc sets and
-implements relational functions between them.
+This module includes functions that take a single pcset to operate on,
+while the relation module takes two pcsets and implements relational
+functions between them.
 
-For the functions defined here, the parameter, pcs, is an
-iterable type: set, tuple, list, or Pcset object--an instance
-of Pcset class from the module pcset--but not str because
-each pc is represented by an int.
+For the functions defined here, the parameter, pcs, is an iterable type:
+set, tuple, list, or Pcset object--an instance of Pcset class from the
+module pcset--but not str because each pc is represented by an int.
 
 List of functions:
 
 INTERVAL CALCULATION
-    pitchInterval(pList, ordered=)
-    interval(pcList)
-    intervalClass(pcList)
+    pitchInterval(pseg, ordered=)
+    interval(pcseg)
+    intervalClass(pcseg)
 
 SET TRANSFORMATION
     transpose(pcs, n)
@@ -46,7 +45,7 @@ SET ANALYSIS
     inversionalSymmetry(pcs)
 """
 
-from pcsets.pcset import Pcset
+from pcpy.pcset import Pcset
 
 __all__ = ["pitchInterval",
            "interval",
@@ -75,20 +74,20 @@ __all__ = ["pitchInterval",
 
 # Interval calculation functions ----------------------------------------------
 
-def pitchInterval(pList, ordered=False):
+def pitchInterval(pseg, ordered=False):
     """
-    A function to compute pitch intervals--ordered or unordered
-    distance between a series of pitches.
+    A function to compute pitch intervals--ordered or unordere distance
+    between a series of pitches.
 
-    :param pList: a list of ordered pitches, representing a series of
-        notes in the pitch space.
-    :param ordered: True for ordered (a.k.a., directed) pitch intervals,
+    :param pseg: a list of ordered pitches, representing a series of notes
+        in the pitch space.
+    :param ordered: True for ordered (i.e., directed) pitch intervals,
         and False (default) for unordered pitch intervals.
     :return: a list of pitch intervals.
     """
     intervals = []
-    for i in range(len(pList) - 1):
-        intvl = pList[i + 1] - pList[i]
+    for i in range(len(pseg) - 1):
+        intvl = pseg[i + 1] - pseg[i]
         intervals.append(intvl)
     if ordered:
         return intervals
@@ -96,34 +95,34 @@ def pitchInterval(pList, ordered=False):
         return [abs(j) for j in intervals]
 
 
-def interval(pcList):
+def interval(pcseg):
     """
     A function to compute ordered pitch-class intervals.
 
-    :param pcList: a list of ordered pcs, representing a series of
-        notes in the pitch-class space.
+    :param pcseg: a list of ordered pcs, representing a series of notes in
+        the pitch-class space.
     :return: a list of ordered pitch-class intervals.
     """
     intervals = []
-    for i in range(len(pcList) - 1):
-        intvl = (pcList[i + 1] - pcList[i]) % 12
+    for i in range(len(pcseg) - 1):
+        intvl = (pcseg[i + 1] - pcseg[i]) % 12
         intervals.append(intvl)
     return intervals
 
 
-def intervalClass(pcList):
+def intervalClass(pcseg):
     """
-    A function to compute unordered pitch-class intervals
-    (a.k.a., interval classes).
+    A function to compute unordered pitch-class intervals (i.e., interval
+    classes).
 
-    :param pcList: a list of unordered pcs, representing a series of
-        notes in the pitch-class space with interval classes.
+    :param pcseg: a list of unordered pcs, representing a series of notes in
+        the pitch-class space with interval classes.
     :return: a list of integers in the range from 0 to 6.
     """
     ics = []
-    for i in range(len(pcList) - 1):
-        intvl1 = (pcList[i + 1] - pcList[i]) % 12
-        intvl2 = (pcList[i] - pcList[i + 1]) % 12
+    for i in range(len(pcseg) - 1):
+        intvl1 = (pcseg[i + 1] - pcseg[i]) % 12
+        intvl2 = (pcseg[i] - pcseg[i + 1]) % 12
         if intvl1 == intvl2:
             ics.append(6)
         else:
@@ -135,7 +134,7 @@ def intervalClass(pcList):
 
 def transpose(pcs, n):
     """
-    A function to transpose the input set by the interval n.
+    A function to transpose the input pcset by the interval n.
 
     :param pcs: an iterable with pcs.
     :param n: an int (mod 12) for the transposition number.
@@ -156,11 +155,11 @@ def invert(pcs):
 
 def invertXY(pcs, x, y):
     """
-    A function to invert the input set around an axis of symmetry
-    specified by pcs x and y. As a result, pcs x and y map onto
-    each other. This is an operation equivalent to TnI where
-    n = x + y. The advantage of using I(x,y) over TnI is that it
-    allows for specifying the axis of symmetry.
+    A function to invert the input pcset around an axis of symmetry
+    specified by pcs x and y. As a result, pcs x and y map onto each other.
+    This is an operation equivalent to TnI where n = x + y. The advantage of
+    using I(x,y) over TnI is that it allows for specifying the axis of
+    symmetry.
 
     :param pcs: an iterable with pcs.
     :param x: an int that inverts x onto y.
@@ -206,10 +205,12 @@ def icv(pcs):
 
     ICV is an enumeration of unordered pc intervals (i.e., ics).
 
-    # FIXME: Pcset class will use this function so this function should have
-    #    both algorithms and allows the use selective by a param (e.g., mode)
-    Recursive definition is implemented in this function for computing ICV.
-    This is an alternative algorithm to that in the icv method of Pcset class.
+    # FIXME: icv method in pcpy.Pcset will have an option to use this
+        function (recursive calculation of icv) as the mode 2.
+        Pcset.icv() has its implementation already which is mode 1.
+        As the module import hierarchy is that operation.py imports
+        pcset.py, move the icv() function body below to pcset.py.
+        Then, the function can be called as Pcset(pcs).icv(mode=2).
 
     :param pcs: an iterable with pcs.
     :return: a list for the ICV.
@@ -228,7 +229,7 @@ def icv(pcs):
 
 def indexVector(pcs):
     """
-    A function to compute the index vector of the input set.
+    A function to compute the index vector of the input pcset.
 
     :param pcs: an iterable with pcs.
     :return: a list of the index vector.
@@ -248,7 +249,7 @@ def normalForm(pcs):
 
 def primeForm(pcs):
     """
-    A function to compute the prime form of the input set.
+    A function to compute the prime form of the input pcset.
 
     :param pcs: an iterable with pcs.
     :return: a list of the prime form.
@@ -258,8 +259,7 @@ def primeForm(pcs):
 
 def transformationLevels(pcs):
     """
-    A function to compute the Tn/TnI transformation level of
-    the input set.
+    A function to compute the Tn/TnI transformation level of the input pcset.
 
     :return: a dict with two nested lists, {"Tn": [], "TnI": []},
         where the lists associated with the keys Tn and TnI represent
@@ -277,7 +277,7 @@ def referentialCollections(pcs):
 
     :return: a dict with abbreviated keys for OCT, WT, and HEX as c+n,
         where c is the collection's initial and n is the transposition
-        level e.g., O0, W1, H3, etc.
+        level (e.g., O0, W1, H3, etc.).
         These keys take an int of 3 possible values:
             0       no reference
             1       all but one pc are literal subset of the Tn level
@@ -295,23 +295,22 @@ def referentialCollections(pcs):
 
 def complement(pcs):
     """
-    Returns a set of the complement of the current set.
+    Returns a set of the complement of the current pcset.
 
     :param pcs: an iterable with pcs.
-    :return: a set of the complement of the current set.
+    :return: a set of the complement of the current pcset.
     """
     return Pcset(pcs).complement()
 
 
 def modalComplements(pcs):
     """
-    Returns the complements to each of the modal collections
-    OCT, WT, and HEX.
+    Returns the complements to each of the modal collections OCT, WT, and HEX.
 
     :param pcs: an iterable with pcs.
     :return: a dict with abbreviated keys for OCT, WT, and HEX as c+n,
         where c is the collection's initial and n is the transposition
-        level e.g., O0, W1, H3, etc.
+        level (e.g., O0, W1, H3, etc.).
         Each key has a value for the complementing pcs to the
         modal collection.
     """
@@ -320,7 +319,7 @@ def modalComplements(pcs):
 
 def subsets(pcs, n):
     """
-    Returns all the subsets of cardinality n of the input set.
+    Returns all the subsets of cardinality n of the input pcset.
 
     :param pcs: an iterable with pcs.
     :param n: an int for the cardinality of the subsets.
@@ -331,10 +330,10 @@ def subsets(pcs, n):
 
 def transpositionalInvariants(pcs, n):
     """
-    Returns the invariants held under transposition of a set by
-    interval n. The number of invariants is equal to the number
-    of times the interval n occurs in the set. The digits of ICV
-    represent intervals n and 12-n. Double the count of ic6.
+    Returns the invariants held under transposition of a pcset by interval n.
+    The number of invariants is equal to the number of times the interval n
+    occurs in the pcset. The digits of ICV represent intervals n and 12-n.
+    Double the count of ic6.
 
     :param pcs: an iterable with pcs.
     :param n: an int for the ordered pc interval of transposition.
@@ -345,9 +344,8 @@ def transpositionalInvariants(pcs, n):
 
 def inversionalInvariants(pcs, n):
     """
-    Returns the invariants held under inverting a pc set by
-    interval n. The number of invariants can be checked in the
-    index vector of the set.
+    Returns the invariants held under inverting a pc set by interval n. The
+    number of invariants can be checked in the index vector of the set.
 
     :param pcs: an iterable with pcs.
     :param n: an int for the index number.
@@ -361,7 +359,7 @@ def transpositionalSymmetry(pcs):
     Returns the degree of transpositional symmetry.
 
     :param pcs: an iterable with pcs.
-    :return: a list of ordered pc intervals--the input set maps entirely
+    :return: a list of ordered pc intervals--the input pcset maps entirely
         onto itself when transposing at the transpositional level(s).
         The number is at least 1, because T0 is an identity operator.
     """
@@ -373,7 +371,7 @@ def inversionalSymmetry(pcs):
     Returns the degree of inversional symmetry.
 
     :param pcs: an iterable with pcs.
-    :return: a list of ordered pc intervals--the input set maps entirely
+    :return: a list of ordered pc intervals--the input pcset maps entirely
         onto itself when inverting with the index number(s).
         None is output when the set is not inversionally symmetrical.
     """
