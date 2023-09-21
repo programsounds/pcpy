@@ -320,12 +320,12 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def transformationLevels(self):
         """
-        Returns the Tn/TnI transformation level of the current set.
+        Returns the Tn/TnI transformation level of the current pcset.
 
-        :return: a dict with two nested lists, {"Tn": [], "TnI": []}, where
+        :return: a dict with two nested lists, {'Tn': [], 'TnI': []}, where
             the list Tn and list TnI represent the transformation levels of the
-            current set. For transpositionally and inversionally symmetrical sets,
-            there would be multiple entries in the lists.
+            current set. For transpositionally and inversionally symmetrical
+            sets, there would be multiple entries in the lists.
         """
         nf = self.normalForm()
         pf = self.primeForm()
@@ -336,8 +336,9 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         A method to check the reference status to the modal collections,
         OCT, WT, HEX, and DT.
 
-        :return: a dict with abbreviated keys for OCT, WT, and HEX as c+n where c is
-            the collection's initial and n is the transposition level e.g., O0, W1, H3, etc.
+        :return: a dict with abbreviated keys for OCT, WT, and HEX as c+n
+            where c is the collection's initial and n is the transposition
+            level (e.g., O0, W1, H3, etc.).
             These keys take int of 3 possible values:
                 0       no reference
                 1       all but one pc are literal subset of the Tn level of the collection
@@ -351,23 +352,23 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         # Check the subset status of the current set against OCT, WT, and HEX collections.
         for col in refCols:
             refCols[col] = self.__subsetStatus(c.COL_DICT[col])
-        refCols["D"] = False  # Add abstract subset status for DT collection
+        refCols['D'] = False  # Add abstract subset status for DT collection
         path = self.pathEmbed({0, 1, 3, 5, 6, 8, 10})  # Operational paths to DT
-        if len(path["Tn"]) + len(path["TnI"]) > 0:
-            refCols["D"] = True
+        if len(path['Tn']) + len(path['TnI']) > 0:
+            refCols['D'] = True
         return refCols
 
     # Set analysis methods ----------------------------------------------------
 
     def complement(self):
         """
-        Returns a set of the complement of the current set.
+        Returns the complement of the current pcset.
         """
         return c.TT - self.pcset
 
     def modalComplements(self):
         """
-        Returns the complements to each of the modal collections OCT, WT, and HEX.
+        Returns complements to each of the modal collections OCT, WT, and HEX.
 
         :return: a dict with abbreviated keys for OCT, WT, and HEX as c+n where c is
             the collection's initial and n is the transposition level e.g., O0, W1, H3, etc.
@@ -392,7 +393,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
     def transpositionalInvariants(self, n):
         """
         Returns the invariants (common tones) held under transposition
-        of a pc set by interval n. The number of invariants is equal to the
+        of a pcset by interval n. The number of invariants is equal to the
         number of times the interval n occurs in the set. The digits of
         ICV represent intervals n and 12-n. Double the count of ic 6.
 
@@ -408,7 +409,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
     def inversionalInvariants(self, n):
         """
         Returns the invariants (common tones) held under inverting
-        a pc set by interval n. The number of invariants can be checked
+        a pcset by interval n. The number of invariants can be checked
         in the index vector of the set.
 
         :param n: int for the index number.
@@ -449,26 +450,26 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
 
     def pathSame(self, pcs):
         """
-        A method to find the operational paths to transform the current set
-        into the input set, that is, to make both sets comprise the same pcs.
+        A method to find the operational paths to transform the current pcset
+        into the input pcset, that is, to make both sets comprise the same pcs.
         If set1 can be transformed into set2 through Tn or TnI, this method
         will find the possible values for n.
 
         :param pcs: an iterable with pcs.
-        :return: a dict with two nested lists, {"Tn": [], "TnI": []}:
+        :return: a dict with two nested lists, {'Tn': [], 'TnI': []}:
             The list Tn comprises possible values for n where Tn(set1) == set2.
             The list TnI comprises possible values for n where TnI(set1) == set2.
         """
-        path = {"Tn": [], "TnI": []}
+        path = {'Tn': [], 'TnI': []}
         pcs = set(pcs)
         if self.primeForm() != Pcset(pcs).primeForm():
             return path
         for n in range(12):
             tn, tni = Pcset(self.pcset), Pcset(self.pcset)
             if tn.opT(n).getSet() == pcs:
-                path["Tn"].append(n)
+                path['Tn'].append(n)
             if tni.opTnI(n).getSet() == pcs:
-                path["TnI"].append(n)
+                path['TnI'].append(n)
         return path
 
     def pathEmbed(self, pcs):
@@ -481,16 +482,16 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
             The list Tn comprises possible values for n where Tn(set1) < set2.
             The list TnI comprises possible values for n where TnI(set1) < set2.
         """
-        path = {"Tn": [], "TnI": []}
+        path = {'Tn': [], 'TnI': []}
         pcs = set(pcs)
         if len(self.pcset) >= len(pcs):
             return path
         for n in range(12):
             tn, tni = Pcset(self.pcset), Pcset(self.pcset)
             if tn.opT(n).getSet() < pcs:
-                path["Tn"].append(n)
+                path['Tn'].append(n)
             if tni.opTnI(n).getSet() < pcs:
-                path["TnI"].append(n)
+                path['TnI'].append(n)
         return path
 
     def pathCover(self, pcs):
@@ -503,16 +504,16 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
             The list Tn comprises possible values for n where Tn(set1) > set2.
             The list TnI comprises possible values for n where TnI(set1) > set2.
         """
-        path = {"Tn": [], "TnI": []}
+        path = {'Tn': [], 'TnI': []}
         pcs = set(pcs)
         if len(self.pcset) <= len(pcs):
             return path
         for n in range(12):
             tn, tni = Pcset(self.pcset), Pcset(self.pcset)
             if tn.opT(n).getSet() > pcs:
-                path["Tn"].append(n)
+                path['Tn'].append(n)
             if tni.opTnI(n).getSet() > pcs:
-                path["TnI"].append(n)
+                path['TnI'].append(n)
         return path
 
     def inclusion(self, pcs):
@@ -597,11 +598,20 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         :return: ICVSIM value.
         :rtype: float
         """
-        from pcpy.relation import icvsim  # FIXME: import will be at top.
-        return icvsim(self.pcset, pcs, raw=raw)
+        # FIXME: do not import from relation.py as it creates a circular import
+        #   Because pcset module is higher in the package hierarchy than
+        #   relation module, define icvsim() here in this module and use it
+        #   in relation module when defining the icvsim() function.
+        # NOTE: icvsim() is already defined in relation module, so start by
+        #  copying it here.
+        #
+        # from pcpy.relation import icvsim
+        # return icvsim(self.pcset, pcs, raw=raw)
+        pass
 
     def recrel(self, pcs):
-        #TODO: implement recrel
+        #TODO: Same as icvsim() above, define it here and import and use it
+        #   in relation module.
         pass
 
     # Private methods ---------------------------------------------------------
