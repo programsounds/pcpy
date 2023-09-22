@@ -524,8 +524,8 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         :param pcs: an iterable with pcs representing the target set class.
         :return: a list of tuples, each tuple contains two sets (target, diff):
             target: a literal subset of the current set of the target set class
-            diff: a set of difference pcs--pcs in the current set but not in the
-                target set.
+            diff: a set of difference pcs--pcs in the current set but not in
+                the target set.
         """
         target = set(Pcset(pcs).primeForm())
         card = len(target)

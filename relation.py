@@ -3,14 +3,13 @@ relation.py     Yota Kobayashi
 
 A module for pitch-class set relations.
 
-This module includes functions that take two pc sets to operate
-on or compute a relation measure between them.
-For the functions of unary set operations, use the operation module.
+This module includes functions that take two pcsets to operate on or compute
+a relation measure between them. For the functions of unary set operations,
+use the operation module.
 
-For the functions defined here, the parameters s1 and s2 are
-iterable of type, that is, set, tuple, list, or Pcset object--an
-instance of Pcset class from the module pcset--but not str,
-because each pc is represented by an int.
+For the functions defined here, the parameters s1 and s2 are iterable of
+type, that is, set, tuple, list, or Pcset object--an instance of Pcset class
+from the module pcset--but not str, because each pc is represented by an int.
 
 List of functions:
 
@@ -50,37 +49,36 @@ SIMILARITY RELATION
 from itertools import combinations
 from math import sqrt
 from statistics import mean
-from pcsets.pcset import Pcset
-from pcsets.operation import interval, primeForm, subsets, complement, icv
+from pcpy.pcset import Pcset
+from pcpy.operation import interval, primeForm, subsets, complement, icv
 
-__all__ = ["union",
-           "difference",
-           "intersection",
-           "symmetricDifference",
-           "isTnEquivalent",
-           "isTnIEquivalent",
-           "pathSame",
-           "pathEmbed",
-           "pathCover",
-           "isSubset",
-           "isSuperset",
-           "inclusion",
-           "isComplement",
-           "complementation",
-           "isZRelated",
-           "setComplexRelations",
-           "simRp",
-           "simIC",
-           "icvsim",
-           "recrel"]
+__all__ = ['union',
+           'difference',
+           'intersection',
+           'symmetricDifference',
+           'isTnEquivalent',
+           'isTnIEquivalent',
+           'pathSame',
+           'pathEmbed',
+           'pathCover',
+           'isSubset',
+           'isSuperset',
+           'inclusion',
+           'isComplement',
+           'complementation',
+           'isZRelated',
+           'setComplexRelations',
+           'simRp',
+           'simIC',
+           'icvsim',
+           'recrel']
 
 
 # Binary operation functions ----------------------------------------------
 
 def union(s1, s2):
     """
-    Returns a new set containing pcs in either s1 or s2
-    with no duplicates.
+    Returns a new pcset containing pcs in either s1 or s2 with no duplicates.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -92,7 +90,7 @@ def union(s1, s2):
 
 def difference(s1, s2):
     """
-    Returns a new set containing pcs in s1 that are not in s2.
+    Returns a new pcset containing pcs in s1 that are not in s2.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -104,7 +102,7 @@ def difference(s1, s2):
 
 def intersection(s1, s2):
     """
-    Returns a new set containing pcs in both s1 and s2.
+    Returns a new pcset containing pcs in both s1 and s2.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -116,7 +114,7 @@ def intersection(s1, s2):
 
 def symmetricDifference(s1, s2):
     """
-    Returns a new set containing pcs in either s1 or s2 but not both.
+    Returns a new pcset containing pcs in either s1 or s2 but not both.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -130,8 +128,8 @@ def symmetricDifference(s1, s2):
 
 def isTnEquivalent(s1, s2):
     """
-    A function to check whether the input two sets are
-    transpositionally equivalent.
+    A function to check whether the input two sets are transpositionally
+    equivalent.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -150,20 +148,20 @@ def isTnEquivalent(s1, s2):
 
 def isTnIEquivalent(s1, s2):
     """
-    A function to check whether the input two sets are
-    inversionally equivalent.
+    A function to check whether the input two pcsets are inversionally
+    equivalent.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
-    :return: an int for the index number with which s1 and s2
-        are TnI equivalent, None if they are not TnI equivalent.
+    :return: an int for the index number with which s1 and s2 are TnI
+        equivalent, None if they are not TnI equivalent.
     """
     if len(s1) != len(s2):
         return None
     s1, s2 = Pcset(s1).normalForm(), Pcset(s2).normalForm()
     ais1, ais2 = interval(s1), interval(s1)  # Create AIS
-    # Sets are inversionally equivalent, if their AISs are
-    #   mutually retrogradable.
+    # Sets are inversionally equivalent, if their AISs are mutually
+    # retrogradable.
     if ais1 == list(reversed(ais2)):
         return (s2[-1] + s1[0]) % 12
     else:
@@ -180,9 +178,9 @@ def isTnIEquivalent(s1, s2):
 def pathSame(s1, s2):
     """
     A function to find the operational paths to transform s1 into s2,
-    that is, to make both sets comprise the same pc elements.
-    If s1 can be transformed into s2 through Tn or TnI, this function
-    will find the possible values for n.
+    that is, to make both sets comprise the same pc elements. If s1 can be
+    transformed into s2 through Tn or TnI, this function will find the
+    possible values for n.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -195,8 +193,7 @@ def pathSame(s1, s2):
 
 def pathEmbed(s1, s2):
     """
-    A function to find the operational paths to make s1 a literal
-    subset of s2.
+    A function to find the operational paths to make s1 a literal subset of s2.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -209,8 +206,8 @@ def pathEmbed(s1, s2):
 
 def pathCover(s1, s2):
     """
-    A function to find the operational paths to make s1 a literal
-    superset of the input set.
+    A function to find the operational paths to make s1 a literal superset
+    of the input set.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -261,8 +258,8 @@ def isSuperset(s1, s2):
 
 def inclusion(s1, s2):
     """
-    A function to find all the possible sets included in s1 that are
-    the members of the set class of s2.
+    A function to find all the possible sets included in s1 that are the
+    members of the set class of s2.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs representing the target set class.
@@ -277,8 +274,8 @@ def inclusion(s1, s2):
 
 def isComplement(s1, s2):
     """
-    A function to check the complement relation between s1 and s2,
-    that is, whether s1 is a complement of s2 literally or abstractly.
+    A function to check the complement relation between s1 and s2, that is,
+    whether s1 is a complement of s2 literally or abstractly.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -299,8 +296,8 @@ def isComplement(s1, s2):
 
 def complementation(s1, s2):
     """
-    A function to find all the possible sets to complement s1 to
-    form the members of the set class of s2.
+    A function to find all the possible sets to complement s1 to form the
+    members of the set class of s2.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs representing the target set class.
@@ -317,8 +314,8 @@ def complementation(s1, s2):
 
 def isZRelated(s1, s2):
     """
-    A function to check the Z-relation between s1 and s2, that is,
-    whether the input s1 and s2 are Z-related having the same ICV.
+    A function to check the Z-relation between s1 and s2, that is, whether
+    the input s1 and s2 are Z-related having the same ICV.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
@@ -359,8 +356,8 @@ def setComplexRelations(s1, s2):
 
 def simRp(s1, s2):
     """
-    A function to check Forte's pitch-class similarity relation
-    Rp between s1 and s2.
+    A function to check Forte's pitch-class similarity relation Rp between
+    s1 and s2.
 
     :param s1: an iterable with pcs.
     :param s2: an iterable with pcs.
