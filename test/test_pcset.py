@@ -1,8 +1,8 @@
 # pcset_test.py
-# Testing script for the class defined in pcset module.
+# Testing script for the class defined in the pcset module.
 
-from pcsets.pcset import *
-from pcsets.operation import *
+from pcpy.pcset import *
+from pcpy.operation import *
 
 set1 = {4, 0, 1}
 set2 = [0, 3, 4, 5, 7, 8]
