@@ -1,7 +1,7 @@
 # relation_test.py
 # Testing script for functions defined in the relation module
 
-from pcsets.relation import *
+from pcpy.relation import *
 
 a = {0, 1, 3, 5, 6}
 b = {1, 3, 4}

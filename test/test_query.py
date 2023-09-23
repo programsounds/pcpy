@@ -3,8 +3,8 @@
 #  module.
 
 from pprint import pprint
-from pcsets.query import catalog
+from pcpy.query import catalog
 
-print(catalog["SC"]["3-1"])
-print(catalog["inclusionTable"]["4-12"]["3"])
-pprint(catalog["MSC"]["5-10"])
+print(catalog['SC']['3-1'])
+print(catalog['inclusionTable']['4-12']['3'])
+pprint(catalog['MSC']['5-10'])

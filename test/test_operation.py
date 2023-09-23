@@ -1,7 +1,7 @@
 # operation_test.py
 # Testing script for functions defined in the operation module
 
-from pcsets.operation import *
+from pcpy.operation import *
 
 
 lst = [3, 5, 1, 10, 23, 16, 8]
