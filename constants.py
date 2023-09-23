@@ -1,7 +1,7 @@
 # Package-wide constants
 
 # Pitch-classes
-PCS = set(range(11))
+PCS = set(range(12))
 
 # Collection aggregates
 TT = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
