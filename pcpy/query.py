@@ -397,5 +397,5 @@ def makeCatalog():
     }
 
     # Write the master dict to a JSON file
-    with open('catalog.json', 'w') as outfile:
+    with open('pcpy/catalog.json', 'w') as outfile:
         json.dump(data, fp=outfile, indent=4, sort_keys=True)
