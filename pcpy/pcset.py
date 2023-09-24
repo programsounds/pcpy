@@ -20,7 +20,7 @@ s.transpose(4).union(b).normalForm()
 """
 
 from itertools import combinations
-from pcpy import constants as c
+from . import constants as c
 
 __all__ = ["Pcset"]
 
