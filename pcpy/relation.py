@@ -49,8 +49,8 @@ SIMILARITY RELATION
 from itertools import combinations
 from math import sqrt
 from statistics import mean
-from pcpy.pcset import Pcset
-from pcpy.operation import interval, primeForm, subsets, complement, icv
+from .pcset import Pcset
+from .operation import interval, primeForm, subsets, complement, icv
 
 __all__ = ['union',
            'difference',

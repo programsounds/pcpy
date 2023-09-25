@@ -45,7 +45,7 @@ SET ANALYSIS
     inversionalSymmetry(pcs)
 """
 
-from pcpy.pcset import Pcset
+from .pcset import Pcset
 
 __all__ = ['pitchInterval',
            'interval',

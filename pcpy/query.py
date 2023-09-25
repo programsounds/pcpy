@@ -104,13 +104,13 @@ fromPFStr(sn)
 import os.path
 import json
 from itertools import combinations
-from pcpy.operation import (complement, primeForm, icv,
-                            referentialCollections, opT, opTnI,
-                            transpositionalSymmetry, inversionalSymmetry)
-from pcpy.relation import setComplexRelations, isSubset
-from pcpy import constants as c
+from .operation import (complement, primeForm, icv, referentialCollections,
+                        opT, opTnI, transpositionalSymmetry,
+                        inversionalSymmetry)
+from .relation import setComplexRelations, isSubset
+from . import constants as c
 
-__all__ = ['toPFStr', 'fromPFStr', 'makePFLists', 'catalog']
+__all__ = ['toPFStr', 'fromPFStr', 'makePFLists', 'catalog', 'makeCatalog']
 
 filename = os.path.join(os.path.dirname(__file__), 'catalog.json')
 with open(filename, 'r') as f:
@@ -397,12 +397,5 @@ def makeCatalog():
     }
 
     # Write the master dict to a JSON file
-    with open('catalog.json', 'w') as outfile:
+    with open('pcpy/catalog.json', 'w') as outfile:
         json.dump(data, fp=outfile, indent=4, sort_keys=True)
-
-
-if __name__ == '__main__':
-    answer = input("\nGenerate a new catalog file (Y/N)?\n>>> ")
-    if answer.lower()[0] == 'y':
-        makeCatalog()
-        print("\nDone!")
