@@ -101,7 +101,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         >>> Pcset({0, 1, 4})
         Pcset({0, 1, 4})
         """
-        return 'Pcset({})'.format(self.pcset)
+        return "Pcset({})".format(self.pcset)
 
     def __len__(self):
         """Returns the cardinality of the pcset."""
@@ -322,7 +322,7 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         """
         Returns the Tn/TnI transformation level of the current pcset.
 
-        :return: a dict with two nested lists, {'Tn': [], 'TnI': []}, where
+        :return: a dict with two nested lists, {"Tn": [], "TnI": []}, where
             the list Tn and list TnI represent the transformation levels of the
             current set. For transpositionally and inversionally symmetrical
             sets, there would be multiple entries in the lists.
@@ -352,10 +352,10 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         # Check the subset status of the current set against OCT, WT, and HEX collections.
         for col in refCols:
             refCols[col] = self.__subsetStatus(c.COL_DICT[col])
-        refCols['D'] = False  # Add abstract subset status for DT collection
+        refCols["D"] = False  # Add abstract subset status for DT collection
         path = self.pathEmbed({0, 1, 3, 5, 6, 8, 10})  # Operational paths to DT
-        if len(path['Tn']) + len(path['TnI']) > 0:
-            refCols['D'] = True
+        if len(path["Tn"]) + len(path["TnI"]) > 0:
+            refCols["D"] = True
         return refCols
 
     # Set analysis methods ----------------------------------------------------
@@ -456,20 +456,20 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
         will find the possible values for n.
 
         :param pcs: an iterable with pcs.
-        :return: a dict with two nested lists, {'Tn': [], 'TnI': []}:
+        :return: a dict with two nested lists, {"Tn": [], "TnI": []}:
             The list Tn comprises possible values for n where Tn(set1) == set2.
             The list TnI comprises possible values for n where TnI(set1) == set2.
         """
-        path = {'Tn': [], 'TnI': []}
+        path = {"Tn": [], "TnI": []}
         pcs = set(pcs)
         if self.primeForm() != Pcset(pcs).primeForm():
             return path
         for n in range(12):
             tn, tni = Pcset(self.pcset), Pcset(self.pcset)
             if tn.opT(n).getSet() == pcs:
-                path['Tn'].append(n)
+                path["Tn"].append(n)
             if tni.opTnI(n).getSet() == pcs:
-                path['TnI'].append(n)
+                path["TnI"].append(n)
         return path
 
     def pathEmbed(self, pcs):
@@ -482,16 +482,16 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
             The list Tn comprises possible values for n where Tn(set1) < set2.
             The list TnI comprises possible values for n where TnI(set1) < set2.
         """
-        path = {'Tn': [], 'TnI': []}
+        path = {"Tn": [], "TnI": []}
         pcs = set(pcs)
         if len(self.pcset) >= len(pcs):
             return path
         for n in range(12):
             tn, tni = Pcset(self.pcset), Pcset(self.pcset)
             if tn.opT(n).getSet() < pcs:
-                path['Tn'].append(n)
+                path["Tn"].append(n)
             if tni.opTnI(n).getSet() < pcs:
-                path['TnI'].append(n)
+                path["TnI"].append(n)
         return path
 
     def pathCover(self, pcs):
@@ -504,16 +504,16 @@ class Pcset:  # TODO: will inherit MutableSet and define the abstract methods.
             The list Tn comprises possible values for n where Tn(set1) > set2.
             The list TnI comprises possible values for n where TnI(set1) > set2.
         """
-        path = {'Tn': [], 'TnI': []}
+        path = {"Tn": [], "TnI": []}
         pcs = set(pcs)
         if len(self.pcset) <= len(pcs):
             return path
         for n in range(12):
             tn, tni = Pcset(self.pcset), Pcset(self.pcset)
             if tn.opT(n).getSet() > pcs:
-                path['Tn'].append(n)
+                path["Tn"].append(n)
             if tni.opTnI(n).getSet() > pcs:
-                path['TnI'].append(n)
+                path["TnI"].append(n)
         return path
 
     def inclusion(self, pcs):

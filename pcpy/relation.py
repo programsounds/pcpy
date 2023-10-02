@@ -52,26 +52,26 @@ from statistics import mean
 from .pcset import Pcset
 from .operation import interval, primeForm, subsets, complement, icv
 
-__all__ = ['union',
-           'difference',
-           'intersection',
-           'symmetricDifference',
-           'isTnEquivalent',
-           'isTnIEquivalent',
-           'pathSame',
-           'pathEmbed',
-           'pathCover',
-           'isSubset',
-           'isSuperset',
-           'inclusion',
-           'isComplement',
-           'complementation',
-           'isZRelated',
-           'setComplexRelations',
-           'simRp',
-           'simIC',
-           'icvsim',
-           'recrel']
+__all__ = ["union",
+           "difference",
+           "intersection",
+           "symmetricDifference",
+           "isTnEquivalent",
+           "isTnIEquivalent",
+           "pathSame",
+           "pathEmbed",
+           "pathCover",
+           "isSubset",
+           "isSuperset",
+           "inclusion",
+           "isComplement",
+           "complementation",
+           "isZRelated",
+           "setComplexRelations",
+           "simRp",
+           "simIC",
+           "icvsim",
+           "recrel"]
 
 
 # Binary operation functions ----------------------------------------------

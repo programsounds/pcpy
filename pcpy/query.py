@@ -21,8 +21,8 @@ PFToSN (key=PF, value=SN)
 
     A mapping for prime form and set name.
 
-    PF: a str for prime form (e.g., '02468T')
-    SN: a str for set name (e.g., '6-35')
+    PF: a str for prime form (e.g., "02468T")
+    SN: a str for set name (e.g., "6-35")
 
     The key PF is a string with pc characters. To facilitate the query with
     list form of PF, use the function of this module, toPFStr().
@@ -75,8 +75,8 @@ MSC ({key=SN, value={card: [{member1}...{memberN}]})
     A mapping for the modal set complexes and their profiles. The nested
     dict represents MSC members grouped by their cardinalities.
 
-    SN: a str for set name of the nexus set (i.e., '5-10', '5-16', '5-19',
-        '5-21', '5-25', '5-28', '5-31', '5-32', '5-33')
+    SN: a str for set name of the nexus set (i.e., "5-10", "5-16", "5-19",
+        "5-21", "5-25", "5-28", "5-31", "5-32", "5-33")
     card: an int for cardinalities of the MSC members (i.e., 3, 4, 6)
 
     The value of the card is a list of the MSC members, and each member is
@@ -94,11 +94,11 @@ List of functions:
 
 toPFStr(s)
     Converts a prime form in any iterable form into a textual representation:
-    e.g., [0, 1, 3, 4, 6, 8, 10] to '012568T'.
+    e.g., [0, 1, 3, 4, 6, 8, 10] to "012568T".
 
 fromPFStr(sn)
     Inverse of toPFStr() function, and converts the prime form from
-    string format to a list format: e.g., '012568T' to [0, 1, 3, 4, 6, 8, 10].
+    string format to a list format: e.g., "012568T" to [0, 1, 3, 4, 6, 8, 10].
 """
 
 import os.path
@@ -110,10 +110,10 @@ from .operation import (complement, primeForm, icv, referentialCollections,
 from .relation import setComplexRelations, isSubset
 from . import constants as c
 
-__all__ = ['toPFStr', 'fromPFStr', 'makePFLists', 'catalog', 'makeCatalog']
+__all__ = ["toPFStr", "fromPFStr", "makePFLists", "catalog", "makeCatalog"]
 
-filename = os.path.join(os.path.dirname(__file__), 'catalog.json')
-with open(filename, 'r') as f:
+filename = os.path.join(os.path.dirname(__file__), "catalog.json")
+with open(filename, "r") as f:
     catalog = json.load(f)
 
 
@@ -122,27 +122,27 @@ with open(filename, 'r') as f:
 def toPFStr(s):
     """
     Converts a prime form in any iterable form into the textual representation:
-    e.g., [0, 1, 3, 4, 6, 8, 10] to '012568T'.
+    e.g., [0, 1, 3, 4, 6, 8, 10] to "012568T".
 
     :param s: an iterable of a prime form.
     :return: a str of characters representing pcs is a prime form.
         int 10 and 11 are substituted by T and E in the PF string.
     """
     # Substitute str T and E for int 10 and 11
-    pf = ['T' if pc == 10 else 'E' if pc == 11 else pc for pc in s]
-    return ''.join(str(pc) for pc in pf)  # Convert to string
+    pf = ["T" if pc == 10 else "E" if pc == 11 else pc for pc in s]
+    return "".join(str(pc) for pc in pf)  # Convert to string
 
 
 def fromPFStr(sn):
     """
     Inverse of toPFStr() function, and converts the prime form from the
-    string format to the list format: e.g., '012568T' to [0, 1, 3, 4, 6, 8, 10].
+    string format to the list format: e.g., "012568T" to [0, 1, 3, 4, 6, 8, 10].
 
     :param sn: a str representing a prime form.
     :return: a list representing the same prime form as the input.
     """
     # Substitute int 10 and 11 for str T and E
-    return [10 if ch == 'T' else 11 if ch == 'E' else int(ch) for ch in sn]
+    return [10 if ch == "T" else 11 if ch == "E" else int(ch) for ch in sn]
 
 
 # Functions for creating the JSON file ----------------------------------------
@@ -161,7 +161,7 @@ def mapPFToSN(pfs):
         sets = pfs[card-3]
         for s in sets:
             pf = toPFStr(s)
-            sn = str(card) + '-' + c.ORDINAL_NUMS[card][ord_]  # Make SN str
+            sn = str(card) + "-" + c.ORDINAL_NUMS[card][ord_]  # Make SN str
             lst.append((pf, sn))
             ord_ += 1
     return dict(lst)
@@ -194,7 +194,7 @@ def mapSC(pfs, dct):
         sets = pfs[card-3]
         for s in sets:
             # SN
-            sn = str(card) + '-' + c.ORDINAL_NUMS[card][ord_]
+            sn = str(card) + "-" + c.ORDINAL_NUMS[card][ord_]
             # PF
             pf = toPFStr(s)
             # ICV
@@ -221,8 +221,8 @@ def mapSC(pfs, dct):
                     sym += "'"
                     if sym not in matts:
                         matts.append(sym)
-            if ref['D']:
-                matts.append('D')
+            if ref["D"]:
+                matts.append("D")
             # MSC membership
             mscs = []
             for nexusSN, nexusPF in c.NEXUS_SETS:
@@ -231,9 +231,9 @@ def mapSC(pfs, dct):
                         or (int(card) == 6 and rels >= 1 and isSubset(nexusPF, s)):
                     mscs.append(nexusSN)
             # Consolidate the dict entry for the current SC
-            lst.append((sn, {'PF': pf, 'ICV': tuple(icvec),
-                             'Z-corr': zcorr, 'symmetry': degrees,
-                             'MA': tuple(matts), 'MSC': mscs}))
+            lst.append((sn, {"PF": pf, "ICV": tuple(icvec),
+                             "Z-corr": zcorr, "symmetry": degrees,
+                             "MA": tuple(matts), "MSC": mscs}))
             ord_ += 1
     return dict(lst)
 
@@ -287,12 +287,12 @@ def mapInclusionTable(dct):
     for i in range(3, 10):
         for sn1 in c.SN_VECS[i][1:]:
             table = {}  # Inclusion table for the current sn1
-            s1 = fromPFStr(dct[sn1]['PF'])  # list form of PF
+            s1 = fromPFStr(dct[sn1]["PF"])  # list form of PF
             for j in [k for k in range(3, 10) if k != i]:
                 card = str(j)
                 vec = []  # Inclusion vector for the current card
                 for sn2 in c.SN_VECS[j][1:]:
-                    s2 = fromPFStr(dct[sn2]['PF'])  # list form of PF
+                    s2 = fromPFStr(dct[sn2]["PF"])  # list form of PF
                     vec.append(countInclusions(s1, s2))
                 table[card] = vec
             tables[sn1] = table
@@ -326,29 +326,29 @@ def mapMSC(dctSC, dctIncl):
     dct = {}
     for nexusSN, nexusPF in c.NEXUS_SETS:
         profile = {}  # dict for the profile of the current MSC
-        for card in '346':
+        for card in "346":
             snvec = c.SN_VECS[int(card)]  # SN vector of the current card
             members = []  # MSC members for the current card
             for ord_ in range(1, len(snvec)):
                 sn = snvec[ord_]  # SN of the current pcset
-                pf = fromPFStr(dctSC[sn]['PF'])  # PF of the current pcset
+                pf = fromPFStr(dctSC[sn]["PF"])  # PF of the current pcset
                 # Add the current pcset to MSC members if it is Kh-related
                 #   or K-related (in case of hexachord) to the nexus set.
                 rels = setComplexRelations(pf, nexusPF)
                 if rels == 2 or (int(card) == 6 and rels >= 1
                                  and isSubset(nexusPF, pf)):
                     # MA
-                    matts = dctSC[sn]['MA']
+                    matts = dctSC[sn]["MA"]
                     # Degrees of symmetry
-                    degrees = dctSC[sn]['symmetry']
+                    degrees = dctSC[sn]["symmetry"]
                     # Inclusion count
                     count = dctIncl[nexusSN][card][ord_-1]
                     # Z-corr
-                    zcorr = dctSC[sn]['Z-corr']
+                    zcorr = dctSC[sn]["Z-corr"]
                     # dict for this member
                     member = dict(SN=sn, MA=matts,
                                   symmetry=degrees, inclusion=count)
-                    member['Z-corr'] = zcorr
+                    member["Z-corr"] = zcorr
                     members.append(member)
             profile[card] = members
         dct[nexusSN] = profile
@@ -390,12 +390,12 @@ def makeCatalog():
 
     # Make a master dictionary for JSON catalog
     data = {
-        'PFToSN': dctName,
-        'SC': dctSC,
-        'inclusionTable': dctIncl,
-        'MSC': dctMSC,
+        "PFToSN": dctName,
+        "SC": dctSC,
+        "inclusionTable": dctIncl,
+        "MSC": dctMSC,
     }
 
     # Write the master dict to a JSON file
-    with open('pcpy/catalog.json', 'w') as outfile:
+    with open("pcpy/catalog.json", "w") as outfile:
         json.dump(data, fp=outfile, indent=4, sort_keys=True)
